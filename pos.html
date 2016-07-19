@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        let cartItems = [
+            {
+              barcode: "Item00001",
+              name: "可口可乐",
+              unit: "瓶",
+              price: "3.00"
+            },
+            {
+                barcode: "Item00001",
+                name: "可口可乐",
+                unit: "瓶",
+                price: "3.00"
+            },
+            {
+                barcode: "Item00002",
+                name: "雪碧",
+                unit: "瓶",
+                price: "3.00"
+            },
+            {
+                barcode: "Item00002",
+                name: "雪碧",
+                unit: "瓶",
+                price: "3.00"
+            },
+            {
+                barcode: "Item00003",
+                name: "酸奶",
+                unit: "盒",
+                price: "12.00"
+            },
+        ];
+
+        window.onload = function() {
+            printReceipts(cartItems);
+        }
+
+        function printReceipts(cartItems) {
+            getNewItems(cartItems);
+        }
+
+        function getNewItems(cartItems) {
+            let newCartItems = [];
+            for (let i = 0; i < cartItems.length; i++){
+                    let exsit = newCartItems.find(function(ele) {
+                        return cartItems[i].barcode === ele.barcode;
+                    });
+                    if(exsit){
+                        exsit.count++;
+                    }else{
+                        cartItems[i].count = 1;
+                        newCartItems.push(cartItems[i]);
+                    }
+            }
+
+            getSubTotal(newCartItems);
+        }
+
+        function getSubTotal(newCartItems) {
+            let subTotalItems;
+            for (let i = 0; i < newCartItems.length; i++){
+                newCartItems[i].subtotal = newCartItems[i].count * newCartItems[i].price;
+            }
+
+            subTotalItems = newCartItems;
+            getSumTotal(subTotalItems);
+        }
+
+        function getSumTotal(subTotalItems){
+            let sum = 0;
+            for(let i = 0; i < subTotalItems.length; i++){
+                sum += subTotalItems[i].subtotal;
+            }
+            print(subTotalItems,sum);
+        }
+
+        function print(subTotalItems, sum) {
+            let receipts = '';
+            for(let i = 0; i < subTotalItems.length; i++) {
+                receipts += ('名称：' + subTotalItems[i].name + ' 数量：' + subTotalItems[i].count + ' 单价：' +subTotalItems[i].price + '（元）' + ' 小计：' + subTotalItems[i].subtotal + '（元）\n');
+            }
+            console.log(receipts + '总计:' + sum + '（元）');
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>
