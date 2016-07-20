@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <script src="fixture.js"></script>
+  <script>
+
+  let barcodes = [
+    'ITEM000000',
+    'ITEM000000',
+    'ITEM000000',
+    'ITEM000000',
+    'ITEM000000',
+    'ITEM000001',
+    'ITEM000001',
+    'ITEM000004'
+  ]
+
+  let allItems = loadAllItems();
+  let newBarcodes = getCartItemsCount(barcodes);
+  let cartItems = getCartItems(newBarcodes, allItems);
+  let subTotalItems = getSubTotal(cartItems);
+  let sum = getSum(subTotalItems);
+  let receipts = print(subTotalItems, sum);
+
+  function getCartItemsCount(barcodes){
+    let newBarcodes= [];
+    for(let i = 0; i < barcodes.length; i++){
+      let exsit = newBarcodes.find(function(ele) {
+        return ele.barcode === barcodes[i];
+      });
+      if(exsit){
+        exsit.count++;
+      }else{
+        newBarcodes.push(Object.assign({}, {barcode:barcodes[i]}, {count:1}));
+      }
+    }
+    return newBarcodes;
+  }
+
+  console.log(newBarcodes);
+
+  function getCartItems(newbarcodes, allItems) {
+    let cartItems = [];
+    for (let i = 0; i < allItems.length; i++) {
+      let exsit = newbarcodes.find(function (ele) {
+        return ele.barcode === allItems[i].barcode;
+      });
+      if (exsit) {
+        cartItems.push(Object.assign({}, allItems[i], {count:exsit.count}));
+      }
+    }
+    return cartItems;
+  }
+
+  console.log(cartItems);
+
+  function getSubTotal(cartItems){
+    let subTotalItems = [];
+    cartItems.forEach(function(ele){
+      let subTotal = ele.count * ele.price;
+      subTotalItems.push(Object.assign(ele, {subTotal:subTotal}));
+    });
+      return subTotalItems;
+    }
+
+  console.log(subTotalItems);
+
+  function getSum(subTotalItems){
+    let sum = 0;
+    subTotalItems.forEach(function(ele){
+      sum += ele.subTotal;
+    });
+    return sum;
+  }
+
+  console.log(sum);
+
+  function print(subTotalItems, sum){
+    let receipts = "*******<没钱赚商店>*******" + "\n";
+    subTotalItems.forEach(function(ele){
+      receipts += ("名称：" + ele.name + " 数量:" + ele.count + " 单价：" + ele.price + " 小计：" + ele.subTotal
+      + "\n");
+    })
+
+    return (receipts +"总计：" + sum + "\n******************");
+  }
+
+  console.log(receipts);
+  </script>
+</head>
+<body>
+
+</body>
+</html>
